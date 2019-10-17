@@ -1,6 +1,13 @@
 {
-  "private": true,
-  "dependencies": {
-    "express": "*"
-  }
+	"private": true,
+	"scripts": {
+		"start": "nodemon server.js"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "*",
+		"http-errors": "^1.7.3",
+		"morgan": "^1.9.1"
+	}
 }
