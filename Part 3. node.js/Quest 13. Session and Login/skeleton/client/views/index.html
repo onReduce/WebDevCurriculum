@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="/style.css" />
+		<script src="/notepad.js"></script>
+	</head>
+	<body>
+		<!-- TODO: 이 곳을 채워 클라이언트를 만들어 보세요 -->
+		<div>
+			<a href="/v1/common/logout"><button>logout</button></a>
+		</div>
+		<br />
+		<form id="memo-form">
+			<fieldset>
+				<legend>memo</legend>
+				<div><textarea id="memo" cols="100" rows="5" placeholder="input new memo"></textarea></div>
+				<div><button type="submit">등록</button></div>
+			</fieldset>
+		</form>
+		<br />
+		<table id="memo-list">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>Memo</th>
+					<th>수정</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+
+		<script>
+			var notepad = new Notepad();
+			document.getElementById('memo-form').addEventListener('submit', function(e) {
+				e.preventDefault();
+				var memo = e.target.memo.value;
+				if (!memo) return alert('input value is empty');
+
+				// POST /memo
+				notepad
+					.createMemo({ memo })
+					.then(function(data) {
+						readAllMemos();
+					})
+					.catch(err => console.error(err));
+			});
+			window.onload = readAllMemos;
+			function readAllMemos() {
+				var tbody = document.querySelector('#memo-list tbody');
+				tbody.innerHTML = '';
+
+				// GET /memo
+				notepad
+					.readAllMemos()
+					.then(function(datas) {
+						datas.map(function(data) {
+							var row = document.createElement('tr');
+							var td = document.createElement('td');
+							td.textContent = data.id;
+							row.appendChild(td);
+
+							td = document.createElement('td');
+							td.textContent = data.memo;
+							row.appendChild(td);
+
+							td = document.createElement('td');
+							var edit = document.createElement('button');
+							edit.textContent = '수정';
+							edit.addEventListener('click', function() {
+								var newMemo = prompt('바꿀 내용을 입력하세요');
+								if (!newMemo) {
+									return alert('내용을 입력하셔야 합니다');
+								}
+								// PUT /memo/:id
+								notepad
+									.updateMemo({ id: data.id, memo: newMemo })
+									.then(function(data) {
+										readAllMemos();
+									})
+									.catch(err => console.error(err));
+							});
+							td.appendChild(edit);
+							row.appendChild(td);
+
+							td = document.createElement('td');
+							var remove = document.createElement('button');
+							remove.textContent = '삭제';
+							remove.addEventListener('click', function() {
+								// DELETE /memo/:id
+								notepad
+									.deleteMemo({ id: data.id })
+									.then(function(data) {
+										readAllMemos();
+									})
+									.catch(err => console.error(err));
+							});
+							td.appendChild(remove);
+							row.appendChild(td);
+							tbody.appendChild(row);
+						});
+					})
+					.catch(err => console.error(err));
+			}
+		</script>
+	</body>
+</html>
