@@ -1,26 +1,34 @@
 CREATE TABLE users (
-  id         int          NOT NULL AUTO_INCREMENT,
-  account    varchar(128) NOT NULL,
-  password   varchar(128) NOT NULL,
-  nickname   varchar(20)  NOT NULL,
-  created_at datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY accounte_UNIQUE (account),
-  UNIQUE KEY nickname_UNIQUE (nickname)
+  id         INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  account    VARCHAR(128) NOT NULL COMMENT '계정',
+  password   VARCHAR(256) NOT NULL COMMENT '암호',
+  nickname   VARCHAR(64)  NOT NULL COMMENT '닉네임',
+  created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP    NULL     DEFAULT NULL
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8
 COMMENT='사용자';
 
+ALTER TABLE users
+  ADD UNIQUE KEY account_UNIQUE (account),
+  ADD UNIQUE KEY nickname_UNIQUE (nickname);
+
 CREATE TABLE memos (
-  id         int          NOT NULL AUTO_INCREMENT,
-  userid     int          NOT NULL,
-  memo       text         NOT NULL,
-  created_at datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  INDEX userid_idx (userid ASC),
-  CONSTRAINT userid FOREIGN KEY (userid) REFERENCES users (id)
+  id         INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  userid     INT          NULL,
+  memo       TEXT         NOT NULL COMMENT '메모 내용',
+  created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP    NULL     DEFAULT NULL
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8
 COMMENT='메모';
+
+ALTER TABLE memos
+  ADD KEY userid (userid),
+  ADD CONSTRAINT userid_fk FOREIGN KEY (userid) REFERENCES users (id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE;
