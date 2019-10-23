@@ -1,7 +1,7 @@
 const Storage = require('../../db/DBStorage');
 
 // POST /v1/common/login
-const login = async (req, res, next) => {
+const login = async (req, res) => {
 	const { id /* password */ } = req.body;
 	try {
 		const session = req.session;
@@ -11,7 +11,7 @@ const login = async (req, res, next) => {
 		}
 		res.redirect('/');
 	} catch (err) {
-		next(err);
+		res.redirect('/');
 	}
 };
 
