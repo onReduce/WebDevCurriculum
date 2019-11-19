@@ -1,6 +1,6 @@
-const controller = require('./foo.controller.js');
+const controller = require('./foo.controller');
 
 module.exports = {
-	GET: controller.read,
-	POST: controller.create,
+	GET: controller.get,
+	POST: controller.post
 };
