@@ -1,10 +1,9 @@
-// const num = process.argv[2];
+const { getConfig, getConfigInquirer } = require('./util');
 
-// console.log(require('./config' + num + '.js'));
-
-const num = Number.parseInt(process.argv[2]);
-let config = '';
-if (!Number.isNaN(num)) {
-	config = require('./config/variables.json').filter(x => x.name === `Config${num}`);
-}
-console.info(config);
+const option = process.argv[2];
+const run = async () => {
+	const condition = option && ['1', '2'].includes(option);
+	const config = condition ? getConfig(option) : await getConfigInquirer();
+	console.info(config);
+};
+run();
