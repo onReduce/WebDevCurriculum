@@ -39,6 +39,7 @@
 					.createMemo({ memo })
 					.then(function(data) {
 						getMemos();
+						e.target.memo.value = '';
 					})
 					.catch(err => console.error(err));
 			});

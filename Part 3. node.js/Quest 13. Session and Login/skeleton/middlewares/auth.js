@@ -1,4 +1,4 @@
-module.exports.isLoggin = (req, res, next) => {
+module.exports.isLoggedIn = (req, res, next) => {
 	if (req.session.userinfo) {
 		next();
 	} else {

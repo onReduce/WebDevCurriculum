@@ -4,7 +4,7 @@ const db = {
 };
 let count = 2;
 module.exports = class LocalStorage {
-	static async readAllMemos({ userId }) {
+	static async findAllMemos({ userId }) {
 		if (!db[userId]) db[userId] = [];
 		return db[userId];
 	}
@@ -22,14 +22,10 @@ module.exports = class LocalStorage {
 		return db[userId][index];
 	}
 
-	static async deletMemo({ userId, id }) {
+	static async destroyMemo({ userId, id }) {
 		const index = db[userId].findIndex(x => x.id === id);
 		const data = db[userId][index];
 		db[userId].splice(index, 1);
 		return data;
-	}
-
-	static get length() {
-		return length;
 	}
 };
