@@ -38,18 +38,18 @@
 				notepad
 					.createMemo({ memo })
 					.then(function(data) {
-						readAllMemos();
+						getMemos();
 					})
 					.catch(err => console.error(err));
 			});
-			window.onload = readAllMemos;
-			function readAllMemos() {
+			window.onload = getMemos;
+			function getMemos() {
 				var tbody = document.querySelector('#memo-list tbody');
 				tbody.innerHTML = '';
 
 				// GET /memo
 				notepad
-					.readAllMemos()
+					.findAllMemos()
 					.then(function(datas) {
 						datas.map(function(data) {
 							var row = document.createElement('tr');
@@ -73,7 +73,7 @@
 								notepad
 									.updateMemo({ id: data.id, memo: newMemo })
 									.then(function(data) {
-										readAllMemos();
+										getMemos();
 									})
 									.catch(err => console.error(err));
 							});
@@ -86,9 +86,9 @@
 							remove.addEventListener('click', function() {
 								// DELETE /memo/:id
 								notepad
-									.deleteMemo({ id: data.id })
+									.destroyMemo({ id: data.id })
 									.then(function(data) {
-										readAllMemos();
+										getMemos();
 									})
 									.catch(err => console.error(err));
 							});

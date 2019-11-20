@@ -3,7 +3,7 @@ const LocalStorage = require('../../db/LocalStorage');
 // GET /v1/memo
 const getAll = async (req, res, next) => {
 	try {
-		const datas = await LocalStorage.readAllMemos();
+		const datas = await LocalStorage.findAllMemos();
 		res.json(datas);
 	} catch (err) {
 		next(err);
@@ -19,7 +19,7 @@ const post = async (req, res, next) => {
 		const data = await LocalStorage.createMemo({ memo });
 		res.json({ id: data.id, memo: data.memo });
 	} catch (err) {
-		return next(err);
+		next(err);
 	}
 };
 
@@ -44,7 +44,7 @@ const remove = async (req, res, next) => {
 	if (!id) return next({ stack: 'id is empty' });
 
 	try {
-		const data = await LocalStorage.deletMemo({ id });
+		const data = await LocalStorage.destroyMemo({ id });
 		res.json({ id: data.id, memo: data.memo });
 	} catch (err) {
 		return next(err);

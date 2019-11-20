@@ -1,7 +1,8 @@
+// Seed data
 const db = [{ id: '0', memo: 'Hello' }, { id: '1', memo: 'World' }];
 let count = 2;
 module.exports = class LocalStorage {
-	static async readAllMemos() {
+	static async findAllMemos() {
 		return db;
 	}
 
@@ -18,14 +19,10 @@ module.exports = class LocalStorage {
 		return db[index];
 	}
 
-	static async deletMemo({ id }) {
+	static async destroyMemo({ id }) {
 		const index = db.findIndex(x => x.id === id);
 		const data = db[index];
 		db.splice(index, 1);
 		return data;
-	}
-
-	static get length() {
-		return length;
 	}
 };

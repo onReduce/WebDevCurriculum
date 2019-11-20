@@ -7,4 +7,6 @@ http.createServer((req, res) => {
 	const { pathname } = url.parse(req.url);
 	const matchFunc = (routes[pathname] && routes[pathname][req.method]) || routes['*'];
 	matchFunc(req, res);
-}).listen(8080);
+}).listen(8080, () => {
+	console.info('Server started !');
+});

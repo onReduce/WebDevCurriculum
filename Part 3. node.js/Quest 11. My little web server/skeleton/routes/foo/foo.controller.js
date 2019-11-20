@@ -4,6 +4,7 @@ const qs = require('querystring');
 const get = (req, res) => {
 	const { query } = url.parse(req.url);
 	const { bar } = qs.parse(query);
+	if (!bar) return res.end('missing bar parameter / wrong content-type');
 	res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
 	res.end(`Hello, ${bar}`);
 };
