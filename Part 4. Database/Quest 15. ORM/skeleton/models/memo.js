@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('memo', {
 		memo: {
 			type: DataTypes.TEXT,
-			allowNull: true,
+			allowNull: false,
 			comment: '메모 내용'
 		}
 	}, {

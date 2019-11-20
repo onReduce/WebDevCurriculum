@@ -1,14 +1,13 @@
 require('dotenv').config();
 const express = require('express');
-const createError = require('http-errors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const cors = require('cors');
 const indexRouter = require('./routes');
 const v1Router = require('./routes/v1');
-const { sequelize } = require('./models');
 const app = express();
+const { sequelize } = require('./models');
 sequelize.sync();
 
 app.use(cors());
@@ -34,16 +33,14 @@ app.use('/', indexRouter);
 app.use('/v1', v1Router);
 
 app.use((req, res, next) => {
-	next({ status: 404, stack: 'not found' });
+	const err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
-app.use((err, req, res) => {
-	let apiError = err;
-	if (!err.status) apiError = createError(err);
-	res.locals.message = apiError.message;
-	res.locals.error = req.app.get('env') === 'development' ? apiError : {};
-	res.status(err.status || 500).json({ message: apiError.message });
+app.use((err, req, res, next) => {
+	res.status(err.status || 500).send(err.message || 'Server Error');
+	next;
 });
-
 app.listen(process.env.PORT || 8080, () => {
 	console.info('Server started!');
 });

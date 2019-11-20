@@ -1,7 +1,7 @@
 const { User, Memo } = require('../models');
 
 module.exports = class DBStorage {
-	static async readAllMemos({ account }) {
+	static async findAllMemos({ account }) {
 		const user = await User.findOne({ attributes: ['id'], where: { account } });
 		const memos = await Memo.findAll({ attributes: ['id', 'memo'], where: { userid: user.id } });
 		return memos;
@@ -18,12 +18,12 @@ module.exports = class DBStorage {
 		return { id: updated.id, memo: updated.memo };
 	}
 
-	static async deletMemo({ id }) {
+	static async destroyMemo({ id }) {
 		const deleted = await Memo.destroy({ where: { id } });
 		return { id: deleted.id, memo: deleted.memo };
 	}
 
-	static async readUser({ account }) {
+	static async findUser({ account }) {
 		const user = await User.findOne({ attributes: ['account', 'password', 'nickname'], where: { account } });
 		return user;
 	}
